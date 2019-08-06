@@ -1,0 +1,8 @@
+{"message":"Unauthorized request to path: /bookmarks","level":"error"}
+{"message":"Unauthorized request to path: /bookmarks","level":"error"}
+{"message":"Unauthorized request to path: /bookmarks","level":"error"}
+{"message":"Unauthorized request to path: /bookmarks","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Title is required","level":"error"}
+{"message":"Book with id 378b7542-872f-4cf5-9d33-ce6d751d3ef0 created","level":"info"}
+{"message":"Book with id 1 deleted.","level":"info"}
