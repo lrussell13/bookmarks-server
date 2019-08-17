@@ -1,15 +1,22 @@
+require('dotenv').config()
 const express = require('express')
 const uuid = require('uuid/v4')
 const logger = require('../logger')
 const { bookmarks } = require('../store')
+const bookmarkService = require('../bookmarks-services')
 
 const bookmarkRouter = express.Router()
 const bodyParser = express.json()
 
 bookmarkRouter
     .route('/bookmarks')
-    .get((req, res) => {
-        res.json(bookmarks);
+    .get((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        bookmarkService.getAllBookmarks(knexInstance)
+        .then(bookmarks => {
+          res.json(bookmarks)
+        })
+        .catch(next)
     })
     .post(bodyParser, (req, res) => {
         const { title, description, url, rating } = req.body;
@@ -66,18 +73,18 @@ bookmarkRouter
 
 bookmarkRouter
     .route('/bookmarks/:id')
-    .get((req, res) => {
-        const { id } = req.params;
-        const book = bookmarks.find(b => b.id == id);
-
-        if (!book) {
-            logger.error(`Book with id ${id} not found.`);
-            return res
-            .status(404)
-            .send('Book Not Found');
+    .get((req, res, next) => {
+        const knexInstance = req.app.get('db')
+        bookmarkService.getById(knexInstance, req.params.id)
+        .then(bookmark => {
+        if (!bookmark) {
+            return res.status(404).json({
+                error: { message: `Bookmark doesn't exist` }
+            })
         }
-
-    res.json(book);
+        res.json(bookmark)
+        })
+        .catch(next)
     })
 
     .delete((req, res) => {
