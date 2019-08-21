@@ -65,7 +65,7 @@ bookmarkRouter
         res.json(serializeBookmark(res.bookmark))
     })
     .delete((req, res, next) => {
-        bookmarkService.deleteArticle(
+        bookmarkService.deleteBookmark(
           req.app.get('db'),
           req.params.id
         )

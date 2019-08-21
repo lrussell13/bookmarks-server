@@ -14,12 +14,12 @@ const bookmarkService = {
                 return rows[0]
             })
     },
-    deleteArticle(knex, id) {
+    deleteBookmark(knex, id) {
         return knex('bookmarks')
           .where({ id })
           .delete()
     },
-    updateArticle(knex, id, newBookmarkFields) {
+    updateBookmark(knex, id, newBookmarkFields) {
         return knex('bookmarks')
           .where({ id })
           .update(newBookmarkFields)

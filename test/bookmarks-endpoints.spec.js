@@ -139,12 +139,12 @@ describe.only('Bookmark Endpoints', function() {
           it(`responds with 404`, () => {
             const id = 123456
             return supertest(app)
-              .delete(`/bookmark/${id}`)
+              .delete(`/bookmarks/${id}`)
               .set('Authorization', 'Bearer b08141cf-3086-42fd-9345-815aafe43c00')
-              .expect(404, {})
+              .expect(404, { error: { message: `Bookmark doesn't exist` } })
           })
         })
-
+        
         context('Given there are bookmarks in the database', () => {
           const testBookmarks = makeBookmarksArray()
           
