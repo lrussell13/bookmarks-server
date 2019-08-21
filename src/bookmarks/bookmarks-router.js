@@ -15,7 +15,7 @@ const serializeBookmark = bookmark => ({
 })
 
 bookmarkRouter
-    .route('/bookmarks')
+    .route('/')
     .get((req, res, next) => {
         const knexInstance = req.app.get('db')
         bookmarkService.getAllBookmarks(knexInstance)
@@ -38,7 +38,7 @@ bookmarkRouter
             .then(bookmark => {
                 res
                 .status(201)
-                .location(`http://localhost:8000/bookmarks/${bookmark.id}`)
+                .location(`http://localhost:8000/api/bookmarks/${bookmark.id}`)
                 .json(serializeBookmark(bookmark));
             })
         .catch(next)
@@ -46,7 +46,7 @@ bookmarkRouter
 
 
 bookmarkRouter
-    .route('/bookmarks/:id')
+    .route('/:id')
     .all((req, res, next) => {
         const { id } = req.params
         bookmarkService.getById(req.app.get('db'), id)
@@ -73,6 +73,29 @@ bookmarkRouter
             res.status(204).end()
           })
           .catch(next)
+    })
+    .patch(bodyParser, (req, res, next) => {
+      const { title, description, url, rating } = req.body
+      const bookmarkToUpdate = { title, description, url, rating } 
+
+      const numberOfValues = Object.values(bookmarkToUpdate).filter(Boolean).length
+        if (numberOfValues === 0) {
+          return res.status(400).json({
+            error: {
+              message: `Request body must contain either 'title', 'description', 'url', or 'rating'`
+            }
+          })
+        }
+
+      bookmarkService.updateBookmark(
+        req.app.get('db'),
+        req.params.id,
+        bookmarkToUpdate
+      )
+        .then(numRowsAffected => {
+          res.status(204).end()
+        })
+        .catch(next)
     })
 
 module.exports = bookmarkRouter
