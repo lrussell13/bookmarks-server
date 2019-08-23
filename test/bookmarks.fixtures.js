@@ -29,7 +29,13 @@ function makeBookmarksArray(){
         description: "description 5",
         url: "url 5",
         rating: 5
-    },]
+    },{
+        id: 6,
+        title: "title 6",
+        description: "description 6",
+        url: "url 6",
+        rating: 4
+    }]
 }
 
 module.exports = {makeBookmarksArray}
